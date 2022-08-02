@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modificationsIfAvailable",
+    "prettier.configPath": "../.prettierrc",
+    "editor.tabSize": 2,
+    "eslint.alwaysShowStatus": true
+}
