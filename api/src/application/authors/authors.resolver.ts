@@ -5,49 +5,48 @@ import {
   Resolver,
   Query,
   ResolveField,
-  Mutation,
+  Root,
 } from "@nestjs/graphql";
-import { Post } from "src/application/posts/models/post.model";
 import { PostsService } from "../posts/posts.service";
-import { AuthService } from "../auth/auth.service";
 import { AuthorsService } from "./authors.service";
 import { Author } from "./models/author.model";
+import { AuthorsPage } from "./models/author.page.model";
+import { PostsPage } from "../posts/models/post.page.model";
 
 @Resolver((of) => Author)
 export class AuthorsResolver {
   constructor(
     private authorsService: AuthorsService,
-    private postsService: PostsService,
-    private authService: AuthService
+    private postsService: PostsService
   ) {}
+
+  @Query((returns) => AuthorsPage, { name: "authors" })
+  async getAuthors(
+    @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
+    @Args("after", { type: () => String, nullable: true }) after: string
+  ) {
+    const all = await this.authorsService.findAll();
+
+    return AuthorsPage.pageGen(all, first, after);
+  }
 
   @Query((returns) => Author, { name: "author" })
   async getAuthor(@Args("id", { type: () => Int }) id: number) {
     return await this.authorsService.findOneById(id);
   }
 
-  @Query((returns) => Author, { name: "me" })
-  async getMe() {
-    return await this.authorsService.findMe();
-  }
-
-  @Mutation((returns) => String)
-  async login(
-    @Args({ name: "username", type: () => String }) username: string,
-    @Args({ name: "password", type: () => String }) password: string
+  @ResolveField("posts", (returns) => PostsPage)
+  async getPosts(
+    @Root() root: unknown,
+    @Parent() author: Author,
+    @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
+    @Args("after", { type: () => String, nullable: true }) after: string
   ) {
-    return await this.authService.login(username, password);
-  }
+    console.log(root);
 
-  // getAuthor(
-  //   @Args('firstName', { nullable: true }) firstName?: string,
-  //   @Args('lastName', { defaultValue: '' }) lastName?: string,
-  //   @Args() args: GetAuthorArgs
-  // ) {}
-
-  @ResolveField("posts", (returns) => [Post])
-  async getPosts(@Parent() author: Author) {
     const { id } = author;
-    return this.postsService.findAll({ authorId: id });
+    const all = await this.postsService.findAll({ authorId: id });
+
+    return PostsPage.pageGen(all, first, after);
   }
 }

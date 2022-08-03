@@ -1,5 +1,6 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory, Reflector } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { AuthGuard } from "./application/auth/auth.guard";
 import { SeedService } from "./infrastructure/persistance/seed.service";
 import { IndexModule } from "./web/index.module";
 
@@ -24,6 +25,10 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
+
+  const reflector = app.get(Reflector);
+  const tokenService = await app.resolve("ITokenService");
+  app.useGlobalGuards(new AuthGuard(tokenService, reflector));
 
   await app.listen(process.env.PORT || 8080);
 }

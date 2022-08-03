@@ -5,6 +5,7 @@ export class PostEntity {
   timestamp: number;
 
   replyId?: number;
+  repostId?: number;
   authorId: number;
 
   constructor(partial: Partial<PostEntity>) {

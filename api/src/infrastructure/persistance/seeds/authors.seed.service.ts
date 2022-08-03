@@ -17,8 +17,6 @@ export class AuthorsSeedService {
       const author = data[i];
       author.password = await this.tokenService.hashPassword(author.password);
     }
-    console.table(data);
-
     await this.cacheService.set(this.key, JSON.stringify(data));
   }
 }

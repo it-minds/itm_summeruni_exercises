@@ -31,7 +31,10 @@ import { TokenService } from "./auth/token.service";
     PostsSeedService,
     SeedService,
 
-    HttpSessionService,
+    {
+      provide: "IHttpSessionService",
+      useClass: HttpSessionService,
+    },
     {
       provide: "ICurrentUserService",
       useClass: CurrentUserService,
@@ -46,6 +49,7 @@ import { TokenService } from "./auth/token.service";
     "IApplicationContext",
     "ICurrentUserService",
     "ITokenService",
+    "IHttpSessionService",
   ],
 })
 export class InfrastructureModule {}

@@ -7,15 +7,8 @@ import { Author } from "./models/author.model";
 export class AuthorsService {
   constructor(
     @Inject("IApplicationContext")
-    private applicationContext: IApplicationContext,
-    @Inject("ICurrentUserService")
-    private currentUserService: ICurrentUserService
+    private applicationContext: IApplicationContext
   ) {}
-
-  async findMe() {
-    const id = await this.currentUserService.getUserId();
-    return await this.findOneById(id);
-  }
 
   async findOneById(id: number): Promise<Author> {
     const author = await this.applicationContext.authors.getById(id);
@@ -30,5 +23,18 @@ export class AuthorsService {
     });
 
     return dto;
+  }
+
+  async findAll(): Promise<Author[]> {
+    const authors = await this.applicationContext.authors.getAll();
+
+    const dtos = authors.map((author) => {
+      return new Author({
+        id: author.id,
+        username: author.name,
+      });
+    });
+
+    return dtos;
   }
 }

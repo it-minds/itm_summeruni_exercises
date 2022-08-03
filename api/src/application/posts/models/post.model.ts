@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class Post {
@@ -8,7 +8,10 @@ export class Post {
   @Field()
   text: string;
 
-  @Field((type) => Int)
+  @Field((type) => Int, { nullable: true })
+  relyId: number;
+
+  @Field((type) => Float)
   timestamp: number;
 
   constructor(input: Partial<Post> = {}) {

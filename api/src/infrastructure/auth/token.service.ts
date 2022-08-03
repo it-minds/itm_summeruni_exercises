@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { ITokenService } from "src/application/common/interfaces/auth/token.interface";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { Token } from "src/application/common/token.type";
+import { JWT, Token } from "src/application/common/token.type";
+import { v4 as uuid } from "uuid";
 
 const split = "$_$";
 
@@ -14,12 +15,13 @@ export class TokenService implements ITokenService {
     const token = await this.jwtService.signAsync(tokenObj, {
       secret: "secret",
       expiresIn: "12h",
+      jwtid: uuid(),
     });
 
     return token;
   }
 
-  async parseToken(token: string): Promise<Token> {
+  async parseToken(token: string): Promise<JWT & Token> {
     const tokenObj = await this.jwtService.verifyAsync(token, {
       secret: "secret",
     });

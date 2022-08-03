@@ -1,9 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { PostEntity } from "src/domain/post.entity";
-import {
-  EntityRepository,
-  IApplicationContext,
-} from "../common/interfaces/applicationcontext.interface";
+import { IApplicationContext } from "../common/interfaces/applicationcontext.interface";
 import { Post } from "./models/post.model";
 
 @Injectable()
@@ -24,6 +20,7 @@ export class PostsService {
           id: post.id,
           text: post.text,
           timestamp: post.timestamp,
+          relyId: post.replyId,
         })
     );
   }
