@@ -15,7 +15,7 @@ import { ApplicationModule } from "src/application/application.module";
       debug: true,
       playground: true,
       cors: {
-        origin: 'http://localhost:3000',
+        origin: "http://localhost:3000",
         credentials: true,
       },
     }),

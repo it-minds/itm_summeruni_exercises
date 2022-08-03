@@ -12,6 +12,6 @@ export class Post {
   timestamp: number;
 
   constructor(input: Partial<Post> = {}) {
-    Object.assign(this, input)
+    Object.assign(this, input);
   }
 }

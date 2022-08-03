@@ -1,7 +1,7 @@
 export enum EntityStatus {
   Created,
   Deleted,
-  Updated
+  Updated,
 }
 
 export interface Tracking<T> {

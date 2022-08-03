@@ -1,21 +1,24 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ICurrentUserService } from "src/application/common/services/auth/currentuser.interface";
+import { ICurrentUserService } from "src/application/common/interfaces/auth/currentuser.interface";
 import { HttpSessionService } from "./httpsession.service";
 
 @Injectable()
-export class CurrentUserService implements ICurrentUserService
-{
-  constructor(
-    @Inject(HttpSessionService) private http: HttpSessionService
-  ){}
+export class CurrentUserService implements ICurrentUserService {
+  constructor(@Inject(HttpSessionService) private http: HttpSessionService) {}
 
-  public getUserId(): number { 
-    
-    console.log(this.http.getAuthorizationHeader())
-    
-    return 1;
+  public async getUserId(): Promise<number> {
+    const auth = await await this.http.getAuthToken();
+    console.log(auth);
+
+    return auth.userId;
   }
-  public getUserEmail(): string { return ""; }
-  public getSessionStartTime(): number { return 0o0; }
-  public getSessionId(): string { return ""; }
+  public async getUserEmail(): Promise<string> {
+    return "";
+  }
+  public async getSessionStartTime(): Promise<number> {
+    return 0o0;
+  }
+  public async getSessionId(): Promise<string> {
+    return "";
+  }
 }

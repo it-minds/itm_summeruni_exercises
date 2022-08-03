@@ -1,4 +1,5 @@
 import { CacheModule, Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
 import { NameFakeService } from "./external/namefake.service";
 import { AuthorsCacheService } from "./persistance/repositories/authors.cache.service";
 import { CacheService } from "./persistance/cache.service";
@@ -9,22 +10,23 @@ import { PostsSeedService } from "./persistance/seeds/posts.seed.service";
 import { ApplicationContext } from "./persistance/applicationcontext.service";
 import { CurrentUserService } from "./auth/currentuser.service";
 import { HttpSessionService } from "./auth/httpsession.service";
+import { TokenService } from "./auth/token.service";
 
 @Module({
-  imports: [CacheModule.register()],
+  imports: [CacheModule.register(), JwtModule.register({})],
   providers: [
     CacheService,
     AuthorsCacheService,
     PostsCacheService,
-    { 
+    {
       provide: "INameFakeService",
-      useClass: NameFakeService
+      useClass: NameFakeService,
     },
     {
       provide: "IApplicationContext",
-      useClass: ApplicationContext
+      useClass: ApplicationContext,
     },
-    
+
     AuthorsSeedService,
     PostsSeedService,
     SeedService,
@@ -32,11 +34,18 @@ import { HttpSessionService } from "./auth/httpsession.service";
     HttpSessionService,
     {
       provide: "ICurrentUserService",
-      useClass: CurrentUserService
+      useClass: CurrentUserService,
     },
-    
-
-],
-  exports: ["INameFakeService", "IApplicationContext", "ICurrentUserService"],
+    {
+      provide: "ITokenService",
+      useClass: TokenService,
+    },
+  ],
+  exports: [
+    "INameFakeService",
+    "IApplicationContext",
+    "ICurrentUserService",
+    "ITokenService",
+  ],
 })
 export class InfrastructureModule {}

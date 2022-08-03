@@ -17,7 +17,7 @@ export class AuthorsController {
   }
 
   @Get(":id")
-  getAuthor(@Param() { id } ): Promise<Author> {
+  getAuthor(@Param() { id }): Promise<Author> {
     return this.authorsService.findOneById(id);
   }
 }

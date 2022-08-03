@@ -8,15 +8,12 @@ export class Author {
   id: number;
 
   @Field({ nullable: true })
-  firstName?: string;
-
-  @Field({ nullable: true })
-  lastName?: string;
+  username?: string;
 
   @Field((type) => [Post])
   posts: Post[];
 
   constructor(input: Partial<Author> = {}) {
-    Object.assign(this, input)
+    Object.assign(this, input);
   }
 }
