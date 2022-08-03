@@ -23,6 +23,11 @@ export class AuthorsResolver {
     return await this.authorsService.findOneById(id);
   }
 
+  @Query((returns) => Author, { name: "me" })
+  async getMe() {
+    return await this.authorsService.findMe();
+  }
+
   // getAuthor(
   //   @Args('firstName', { nullable: true }) firstName?: string,
   //   @Args('lastName', { defaultValue: '' }) lastName?: string,

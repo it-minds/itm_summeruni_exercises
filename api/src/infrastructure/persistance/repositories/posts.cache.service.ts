@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { CacheService } from "./cache.service";
-import { EntityStatus, Tracking } from "./tracking";
+import { CacheService } from "../cache.service";
+import { EntityStatus, Tracking } from "../tracking";
 import { v5 as uuidSeed, v4 as uuid } from "uuid"
-import { IApplicationContext } from "src/application/common/services/applicationcontext.interface";
+import { EntityRepository } from "src/application/common/services/applicationcontext.interface";
 import { PostEntity } from "src/domain/post.entity";
 
 const uuidNamespace = "fdb78606-a36e-42c3-a9c1-c49c247b6bb9"
@@ -10,7 +10,7 @@ const uuidNamespace = "fdb78606-a36e-42c3-a9c1-c49c247b6bb9"
 type Entity = PostEntity;
 
 @Injectable()
-export class PostsCacheService implements IApplicationContext<Entity> {
+export class PostsCacheService implements EntityRepository<Entity> {
   constructor(@Inject(CacheService) private cacheService: CacheService) {}
 
   private readonly key = "posts";

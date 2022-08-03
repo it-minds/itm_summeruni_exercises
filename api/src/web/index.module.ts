@@ -14,6 +14,10 @@ import { ApplicationModule } from "src/application/application.module";
       driver: ApolloDriver,
       debug: true,
       playground: true,
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+      },
     }),
     InfrastructureModule,
     ApplicationModule,

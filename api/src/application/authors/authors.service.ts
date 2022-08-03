@@ -1,17 +1,23 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { AuthorEntity } from "src/domain/author.entity";
-import { IApplicationContext } from "../common/services/applicationcontext.interface";
+import {  IApplicationContext } from "../common/services/applicationcontext.interface";
+import { ICurrentUserService } from "../common/services/auth/currentuser.interface";
 import { Author } from "./models/author.model";
 
 @Injectable()
 export class AuthorsService {
   constructor(
-    @Inject("IApplicationContext_AuthorEntity") private applicationContextAuthorEntity: IApplicationContext<AuthorEntity>
+    @Inject("IApplicationContext") private applicationContext: IApplicationContext,
+    @Inject("ICurrentUserService") private currentUserService: ICurrentUserService
+
   ) {}
+
+  async findMe() {
+    return await this.findOneById(this.currentUserService.getUserId());
+  }
 
   async findOneById(id: number): Promise<Author> {
 
-    const author = await this.applicationContextAuthorEntity.getById(id);
+    const author = await this.applicationContext.authors.getById(id);
     
     if (!author) {
       throw new Error("404 - not found")

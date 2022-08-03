@@ -1,4 +1,7 @@
-export interface IApplicationContext<T> {
+import { AuthorEntity } from "src/domain/author.entity"
+import { PostEntity } from "src/domain/post.entity"
+
+export interface EntityRepository<T> {
   // getRandomNameFake(): Promise<NameFake>;
   getAll(): Promise<T[]>
   getById(id: number): Promise<T>
@@ -11,4 +14,9 @@ export interface IApplicationContext<T> {
   update(author: T): void;
   add(author: T): void;
   saveChanges(): Promise<void>
+}
+
+export interface IApplicationContext {
+  posts: EntityRepository<PostEntity>;
+  authors: EntityRepository<AuthorEntity>
 }
