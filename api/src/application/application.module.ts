@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { InfrastructureModule } from "src/infrastructure/infrastructure.module";
 import { AuthController } from "./auth/auth.controller";
-import { AuthGuard } from "./auth/auth.guard";
+import { AuthGuard } from "../infrastructure/auth/auth.guard";
 import { AuthResolver } from "./auth/auth.resolver";
 import { AuthService } from "./auth/auth.service";
 import { AuthorsController, AuthorsResolver, AuthorsService } from "./authors";

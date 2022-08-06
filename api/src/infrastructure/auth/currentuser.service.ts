@@ -1,36 +1,28 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
+import { REQUEST } from "@nestjs/core";
+import { CONTEXT } from "@nestjs/graphql";
 import { ICurrentUserService } from "src/application/common/interfaces/auth/currentuser.interface";
 import { JWT, Token } from "src/application/common/token.type";
-import { HttpSessionService } from "./httpsession.service";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({
+  scope: Scope.REQUEST
+})
 export class CurrentUserService implements ICurrentUserService {
   constructor(
-    @Inject("IHttpSessionService") private http: HttpSessionService
+    @Inject(REQUEST) private readonly request: Request,
+    @Inject(CONTEXT) private readonly context
   ) {}
 
-  private auth: JWT & Token;
-  private async getAuth() {
-    if (this.auth) return this.auth;
-    const auth = await this.http.getAuthToken();
-    this.auth = auth;
-    return auth;
+  private getAuth(): JWT & Token {
+    if (this.context.req) {
+      return this.context.req["user-token"];
+    }
+
+    return this.request["user-token"]
   }
 
-  public async getUserId(): Promise<number> {
-    const auth = await this.getAuth();
-    return auth.userId;
-  }
-  public async getUserEmail(): Promise<string> {
-    const auth = await this.getAuth();
-    return auth.username;
-  }
-  public async getSessionStartTime(): Promise<number> {
-    const auth = await this.getAuth();
-    return auth.iat;
-  }
-  public async getSessionId(): Promise<string> {
-    const auth = await this.getAuth();
-    return auth.jti;
-  }
+  public getUserId= (): number => this.getAuth()?.userId;
+  public getUserEmail = (): string => this.getAuth()?.username;
+  public getSessionStartTime = (): number => this.getAuth()?.iat;
+  public getSessionId = (): string => this.getAuth()?.jti;
 }

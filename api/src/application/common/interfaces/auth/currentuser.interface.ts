@@ -1,7 +1,7 @@
 export interface ICurrentUserService {
-  getUserId(): Promise<number>;
-  getUserEmail(): Promise<string>;
+  getUserId(): number;
+  getUserEmail(): string;
 
-  getSessionStartTime(): Promise<number>;
-  getSessionId(): Promise<string>;
+  getSessionStartTime(): number;
+  getSessionId(): string;
 }

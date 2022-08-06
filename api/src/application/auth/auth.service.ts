@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   async findMe() {
-    const id = await this.currentUserService.getUserId();
+    const id = this.currentUserService.getUserId();
     const author = await this.authorsService.findOneById(id);
 
     const me = new Me({

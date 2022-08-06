@@ -1,4 +1,4 @@
-import { CacheModule, Module } from "@nestjs/common";
+import { CacheModule, Module, NestModule } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { NameFakeService } from "./external/namefake.service";
 import { AuthorsCacheService } from "./persistance/repositories/authors.cache.service";
@@ -11,6 +11,7 @@ import { ApplicationContext } from "./persistance/applicationcontext.service";
 import { CurrentUserService } from "./auth/currentuser.service";
 import { HttpSessionService } from "./auth/httpsession.service";
 import { TokenService } from "./auth/token.service";
+
 
 @Module({
   imports: [CacheModule.register(), JwtModule.register({})],
@@ -32,17 +33,17 @@ import { TokenService } from "./auth/token.service";
     SeedService,
 
     {
+      provide: "ITokenService",
+      useClass: TokenService,
+    },
+    {
       provide: "IHttpSessionService",
       useClass: HttpSessionService,
     },
     {
       provide: "ICurrentUserService",
       useClass: CurrentUserService,
-    },
-    {
-      provide: "ITokenService",
-      useClass: TokenService,
-    },
+    },    
   ],
   exports: [
     "INameFakeService",

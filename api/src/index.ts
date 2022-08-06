@@ -1,8 +1,11 @@
 import { NestFactory, Reflector } from "@nestjs/core";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { AuthGuard } from "./application/auth/auth.guard";
+import { SwaggerModule } from "@nestjs/swagger";
+import { AuthGuard } from "./infrastructure/auth/auth.guard";
+import { IHttpSessionService } from "./application/common/interfaces/auth/httpsession.interface";
 import { SeedService } from "./infrastructure/persistance/seed.service";
 import { IndexModule } from "./web/index.module";
+import { getSwaggerDocumentConfig } from "./web/swagger/document";
+import { styles } from "./web/swagger/style.css";
 
 async function bootstrap() {
   const app = await NestFactory.create(IndexModule);
@@ -15,20 +18,16 @@ async function bootstrap() {
   const seeder = app.get(SeedService);
   await seeder.seed();
 
-  const config = new DocumentBuilder()
-    .setTitle("Summer University Twitter")
-    .setDescription(
-      "This API is to be used for most of the applications we are building."
-    )
-    .setVersion("1.0")
-    // .addTag('su')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, document);
+  const document = SwaggerModule.createDocument(app, getSwaggerDocumentConfig());
+  SwaggerModule.setup("swagger", app, document, {
+    customCss: styles,
+    customSiteTitle: "SU API Swagger"
+   });
 
   const reflector = app.get(Reflector);
-  const tokenService = await app.resolve("ITokenService");
-  app.useGlobalGuards(new AuthGuard(tokenService, reflector));
+  const httpSessionService: IHttpSessionService = await app.resolve("IHttpSessionService");
+  
+  app.useGlobalGuards(new AuthGuard(httpSessionService, reflector));
 
   await app.listen(process.env.PORT || 8080);
 }

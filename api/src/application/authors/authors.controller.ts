@@ -1,9 +1,11 @@
 import { Controller, Get, Param, Query } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { AuthorsService } from "./authors.service";
 import { Author } from "./models/author.model";
 import { AuthorsPage } from "./models/author.page.model";
 
 @Controller("authors")
+@ApiBearerAuth('authorization')
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
