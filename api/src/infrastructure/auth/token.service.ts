@@ -7,11 +7,12 @@ import { v4 as uuid } from "uuid";
 import { ConfigService } from "@nestjs/config";
 import { EnvironmentVariables } from "src/application/common/interfaces/environment.interface";
 
-const split = "$_$";
-
 @Injectable()
 export class TokenService implements ITokenService {
-  constructor(@Inject(JwtService) private readonly jwtService: JwtService, private readonly configService: ConfigService<EnvironmentVariables>) {}
+  constructor(
+    @Inject(JwtService) private readonly jwtService: JwtService,
+    private readonly configService: ConfigService<EnvironmentVariables>
+  ) {}
 
   async generateToken(tokenObj: Token): Promise<string> {
     console.log("TOKEN GENERATE", tokenObj);
@@ -33,18 +34,10 @@ export class TokenService implements ITokenService {
   }
 
   async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
-
-    const hash = await bcrypt.hash(password, salt);
-
-    return `${hash}${split}${salt}`;
+    return await bcrypt.hash(password, 10);
   }
 
   async comparePassword(password: string, hash: string): Promise<boolean> {
-    const [hashPassword] = hash.split(split);
-
-    const isMatch = await bcrypt.compare(password, hashPassword);
-
-    return isMatch;
+    return await bcrypt.compare(password, hash);
   }
 }

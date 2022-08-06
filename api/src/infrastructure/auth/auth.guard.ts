@@ -18,8 +18,6 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext) {
-    console.log("GUARD - AuthGuard")
-
     const isPublic = this.reflector.get<boolean>(
       "isPublic",
       context.getHandler()
@@ -33,8 +31,8 @@ export class AuthGuard implements CanActivate {
       const request = this.httpSessionService.getRequestFromContext(context);
       const token = await this.httpSessionService.getTokenFromRequest(request);
       return !!token.userId;
-    } catch(err) {
-      console.error(err)
+    } catch (err) {
+      console.error(err);
       throw new UnauthorizedException();
     }
   }

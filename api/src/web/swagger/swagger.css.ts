@@ -1,6 +1,6 @@
-const itmBlue = "#0E83C6"
-const itmPink = "#DD0C6A"
-const itmGrey = "#646464"
+const itmBlue = "#0E83C6";
+const itmPink = "#DD0C6A";
+const itmGrey = "#646464";
 
 export const styles = `
 .opblock-summary-method {
@@ -30,7 +30,4 @@ a.link {
   background-repeat: no-repeat;
   background-size: contain;
 }
-`
-
-
-646464
+`;

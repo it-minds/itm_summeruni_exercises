@@ -6,20 +6,20 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { InfrastructureModule } from "src/infrastructure/infrastructure.module";
 import { ApplicationModule } from "src/application/application.module";
 import { ConfigModule } from "@nestjs/config";
-import { HttpSessionMiddleware } from "src/infrastructure/auth/httpsessionintercept.middleware";
+import { HttpSessionMiddleware } from "src/infrastructure/auth/httpsession.middleware";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [
-        '.env.development.local',
-        '.env.development',
-        '.env.production.local',
-        '.env.production',
-        '.env.local',
-        '.env'
-      ]
+        ".env.development.local",
+        ".env.development",
+        ".env.production.local",
+        ".env.production",
+        ".env.local",
+        ".env",
+      ],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       include: [ApplicationModule],
@@ -28,7 +28,7 @@ import { HttpSessionMiddleware } from "src/infrastructure/auth/httpsessioninterc
       debug: true,
       playground: true,
       cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.CORS_ORIGIN,
         credentials: true,
       },
     }),
@@ -40,6 +40,6 @@ import { HttpSessionMiddleware } from "src/infrastructure/auth/httpsessioninterc
 })
 export class IndexModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HttpSessionMiddleware).forRoutes("*")
+    consumer.apply(HttpSessionMiddleware).forRoutes("*");
   }
 }

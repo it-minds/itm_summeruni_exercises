@@ -1,4 +1,4 @@
-import { CacheModule, Module, NestModule } from "@nestjs/common";
+import { CacheModule, Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { NameFakeService } from "./external/namefake.service";
 import { AuthorsCacheService } from "./persistance/repositories/authors.cache.service";
@@ -11,7 +11,7 @@ import { ApplicationContext } from "./persistance/applicationcontext.service";
 import { CurrentUserService } from "./auth/currentuser.service";
 import { HttpSessionService } from "./auth/httpsession.service";
 import { TokenService } from "./auth/token.service";
-
+import { AuthGuard } from "./auth/auth.guard";
 
 @Module({
   imports: [CacheModule.register(), JwtModule.register({})],
@@ -43,7 +43,11 @@ import { TokenService } from "./auth/token.service";
     {
       provide: "ICurrentUserService",
       useClass: CurrentUserService,
-    },    
+    },
+    {
+      provide: "AuthGuard",
+      useClass: AuthGuard,
+    },
   ],
   exports: [
     "INameFakeService",
@@ -51,6 +55,7 @@ import { TokenService } from "./auth/token.service";
     "ICurrentUserService",
     "ITokenService",
     "IHttpSessionService",
+    "AuthGuard",
   ],
 })
 export class InfrastructureModule {}

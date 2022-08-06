@@ -28,20 +28,38 @@ export class PostsCacheService implements EntityRepository<Entity> {
 
     return all.find((x) => x.id == id);
   }
+
   async queryForMany(input: Partial<Entity>): Promise<Entity[]> {
     const all = await this.getAll();
 
-    const filtered = all.filter((x) =>
-      Object.entries(input).every(([key, val]) => x[key] === val)
-    );
+    if (Object.entries(input).length > 1) {
+      const [first, ...rest] = await Promise.all(
+        Object.entries(input).map(([key, val]) =>
+          this.queryForMany({
+            [key]: val,
+          })
+        )
+      );
+
+      return rest.reduce<Entity[]>(
+        (prev, cur) =>
+          prev.filter((x) => cur.findIndex((y) => y.id === x.id) >= 0),
+        first
+      );
+    }
+
+    const [key, val] = Object.entries(input)[0];
+    const filtered = all.filter((x) => x[key] === val);
 
     return filtered;
   }
+
   async queryForFirst(input: Partial<Entity>): Promise<Entity> {
     const filtered = await this.queryForMany(input);
 
     return filtered[0];
   }
+
   async queryForOne(input: Partial<Entity>): Promise<Entity> {
     const filtered = await this.queryForMany(input);
 

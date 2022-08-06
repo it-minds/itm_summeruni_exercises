@@ -6,11 +6,11 @@ interface InstanceConstructor<T> {
 }
 
 /**
- * 
- * @param PageInstance 
- * @param EdgeInstance 
- * @param cursorCallback 
- * @returns 
+ *
+ * @param PageInstance
+ * @param EdgeInstance
+ * @param cursorCallback
+ * @returns
  */
 export const GenericPageGen =
   <T, U extends Page<T>, V extends Edge<T>>(

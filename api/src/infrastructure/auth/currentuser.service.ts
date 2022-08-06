@@ -5,7 +5,7 @@ import { ICurrentUserService } from "src/application/common/interfaces/auth/curr
 import { JWT, Token } from "src/application/common/token.type";
 
 @Injectable({
-  scope: Scope.REQUEST
+  scope: Scope.REQUEST,
 })
 export class CurrentUserService implements ICurrentUserService {
   constructor(
@@ -18,10 +18,10 @@ export class CurrentUserService implements ICurrentUserService {
       return this.context.req["user-token"];
     }
 
-    return this.request["user-token"]
+    return this.request["user-token"];
   }
 
-  public getUserId= (): number => this.getAuth()?.userId;
+  public getUserId = (): number => this.getAuth()?.userId;
   public getUserEmail = (): string => this.getAuth()?.username;
   public getSessionStartTime = (): number => this.getAuth()?.iat;
   public getSessionId = (): string => this.getAuth()?.jti;
