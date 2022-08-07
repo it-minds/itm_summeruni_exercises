@@ -11,7 +11,7 @@ export class PostsSeedService {
   async seed() {
     const posts: PostEntity[] = [];
 
-    let count = 0;
+    let count = 1;
     for (let authorId = 1; authorId <= 20; authorId++) {
       const randomPostCount = Math.floor(Math.random() * 10);
 
