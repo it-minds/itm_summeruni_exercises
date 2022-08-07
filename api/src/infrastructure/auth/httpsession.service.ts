@@ -40,7 +40,6 @@ export class HttpSessionService implements IHttpSessionService {
     let request: Request;
     const contextType = context.getType<"http" | "graphql">();
 
-    console.log("HTTP SESSION", contextType);
     if (contextType == "graphql") {
       request = this.getGraphqlRequest(context);
     } else if (contextType == "http") {

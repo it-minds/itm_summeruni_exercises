@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
-import { IndexController } from "./index.controller";
 import { IndexService } from "./index.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
@@ -35,7 +34,6 @@ import { HttpSessionMiddleware } from "src/infrastructure/auth/httpsession.middl
     InfrastructureModule,
     ApplicationModule,
   ],
-  controllers: [IndexController],
   providers: [IndexService],
 })
 export class IndexModule implements NestModule {

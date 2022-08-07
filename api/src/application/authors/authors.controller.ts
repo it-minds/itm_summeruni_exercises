@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags, ApiResponse } from "@nestjs/swagger";
 import { PostsService } from "../posts";
 import { PostsPage } from "../posts/models/post.page.model";
 import { AuthorsService } from "./authors.service";
+import { NewAuthor } from "./models/author.input";
 import { Author } from "./models/author.model";
 import { AuthorsPage } from "./models/author.page.model";
 
@@ -16,29 +17,38 @@ export class AuthorsController {
   ) {}
 
   @Get()
+  @ApiResponse({ type: AuthorsPage })
   async getAuthors(
     @Query("first") first: number,
     @Query("after") after?: string
   ): Promise<AuthorsPage> {
     const all = await this.authorsService.findAll();
-    return AuthorsPage.pageGen(all, first, after);
+    return AuthorsPage.pageGen(all, +first, after);
   }
 
   @Get(":id")
+  @ApiResponse({ type: Author })
   async getAuthor(@Param("id") id: number): Promise<Author> {
-    return await this.authorsService.findOneById(id);
+    return await this.authorsService.findOneById(+id);
   }
 
   @Get(":id/posts")
+  @ApiResponse({ type: PostsPage })
   async getAuthorPosts(
     @Param("id") id: number,
     @Query("first") first: number,
     @Query("after") after?: string
   ): Promise<PostsPage> {
     const all = await this.postsService.findAuthorsPosts({
-      authorId: Number(id),
+      authorId: +id,
     });
 
-    return PostsPage.pageGen(all, first, after);
+    return PostsPage.pageGen(all, +first, after);
+  }
+
+  @Post()
+  @ApiResponse({ type: Author })
+  async createAuthor(@Body() newAuthor: NewAuthor): Promise<Author> {
+    return await this.authorsService.createAuthor(newAuthor);
   }
 }

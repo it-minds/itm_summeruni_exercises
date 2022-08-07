@@ -15,7 +15,6 @@ export class TokenService implements ITokenService {
   ) {}
 
   async generateToken(tokenObj: Token): Promise<string> {
-    console.log("TOKEN GENERATE", tokenObj);
     const token = await this.jwtService.signAsync(tokenObj, {
       secret: this.configService.get("AUTH_TOKEN_SECRET"),
       expiresIn: "12h",

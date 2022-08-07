@@ -10,6 +10,7 @@ import {
 import { PostsPage } from "../posts/models/post.page.model";
 import { PostsService } from "../posts/posts.service";
 import { AuthService } from "./auth.service";
+import { LoginInput } from "./models/login.input";
 import { Me } from "./models/me.model";
 import { Public } from "./public.decorator";
 
@@ -27,10 +28,7 @@ export class AuthResolver {
 
   @Mutation((returns) => String)
   @Public()
-  async login(
-    @Args({ name: "username", type: () => String }) username: string,
-    @Args({ name: "password", type: () => String }) password: string
-  ) {
+  async login(@Args("loginData") { username, password }: LoginInput) {
     return await this.authService.login(username, password);
   }
 

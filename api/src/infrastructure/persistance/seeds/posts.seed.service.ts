@@ -1,6 +1,4 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { INameFakeService } from "src/application/common/interfaces/namefake.interface";
-import { AuthorEntity } from "src/domain/author.entity";
 import { PostEntity } from "src/domain/post.entity";
 import { CacheService } from "../cache.service";
 

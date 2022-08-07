@@ -4,12 +4,12 @@ const itmGrey = "#646464";
 
 export const styles = `
 .opblock-summary-method {
-  border-color: ${itmPink} !important;
-  background: ${itmPink} !important;
+  border-color: ${itmGrey} !important;
+  background: ${itmGrey} !important;
 }
 
 .topbar {
-  background-color: ${itmPink} !important;
+  background-color: ${itmBlue} !important;
 }
 
 a.link {
@@ -21,11 +21,11 @@ a.link {
 }
 
 .info .title small {
-  background-color: ${itmGrey} !important;
+  background-color: ${itmPink} !important;
 }
 
 .topbar .topbar-wrapper {
-  background-image: url(https://it-minds.dk/media/7481/logo-blue.png);
+  background-image: url(https://it-minds.dk/media/7485/logo-white.png);
   height: 60px;
   background-repeat: no-repeat;
   background-size: contain;

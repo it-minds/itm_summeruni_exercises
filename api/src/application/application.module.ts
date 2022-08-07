@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { InfrastructureModule } from "src/infrastructure/infrastructure.module";
 import { AuthController, AuthResolver, AuthService } from "./auth";
 import { AuthorsController, AuthorsResolver, AuthorsService } from "./authors";
-import { PostsController, PostsService } from "./posts";
+import { PostsController, PostsResolver, PostsService } from "./posts";
 
 @Module({
   imports: [InfrastructureModule],
@@ -11,6 +11,7 @@ import { PostsController, PostsService } from "./posts";
     AuthorsService,
     AuthorsResolver,
     PostsService,
+    PostsResolver,
     AuthService,
     AuthResolver,
   ],

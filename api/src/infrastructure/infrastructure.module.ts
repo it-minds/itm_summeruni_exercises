@@ -12,6 +12,7 @@ import { CurrentUserService } from "./auth/currentuser.service";
 import { HttpSessionService } from "./auth/httpsession.service";
 import { TokenService } from "./auth/token.service";
 import { AuthGuard } from "./auth/auth.guard";
+import { ReactionsCacheService } from "./persistance/repositories/reactions.cache.service";
 
 @Module({
   imports: [CacheModule.register(), JwtModule.register({})],
@@ -19,6 +20,7 @@ import { AuthGuard } from "./auth/auth.guard";
     CacheService,
     AuthorsCacheService,
     PostsCacheService,
+    ReactionsCacheService,
     {
       provide: "INameFakeService",
       useClass: NameFakeService,

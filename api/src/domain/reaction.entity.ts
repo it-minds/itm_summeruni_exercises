@@ -13,4 +13,10 @@ export class ReactionEntity {
   authorId: number;
   postId: number;
   reaction: ReactionType;
+
+  readonly id: string;
+  constructor(partial: Partial<ReactionEntity>) {
+    Object.assign(this, partial);
+    this.id = `${this.authorId}-${this.postId}`;
+  }
 }

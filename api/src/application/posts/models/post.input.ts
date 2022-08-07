@@ -2,12 +2,8 @@ import { Field, InputType } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 
 @InputType()
-export class LoginInput {
+export class NewPost {
   @Field()
   @ApiProperty()
-  username: string;
-
-  @Field()
-  @ApiProperty()
-  password: string;
+  text: string;
 }
