@@ -4,7 +4,6 @@ import { IndexModule } from "./web/index.module";
 import {
   getSwaggerDocumentConfig,
   swaggerDocumentOptions,
-  swaggerOptions,
 } from "./web/swagger";
 import { writeFileSync } from "fs";
 import { exit } from "process";
@@ -18,7 +17,6 @@ async function bootstrap() {
     getSwaggerDocumentConfig(),
     swaggerDocumentOptions
   );
-  SwaggerModule.setup("swagger", app, document, swaggerOptions);
   writeFileSync("./swagger-spec.json", JSON.stringify(document));
   console.log("SCHEMA GENERATED!");
   exit(0);

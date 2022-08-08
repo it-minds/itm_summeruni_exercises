@@ -7,6 +7,7 @@ import { ICurrentUserService } from "../common/interfaces/auth/currentuser.inter
 import { NewPost } from "./models/post.input";
 import { Post } from "./models/post.model";
 import { Reaction } from "./models/reaction.model";
+import { PostsGateway } from "./posts.gateway";
 
 @Injectable()
 export class PostsService {
@@ -14,7 +15,8 @@ export class PostsService {
     @Inject("IApplicationContext")
     private applicationContext: IApplicationContext,
     @Inject("ICurrentUserService")
-    private currentUserService: ICurrentUserService
+    private currentUserService: ICurrentUserService,
+    private readonly postsGateway: PostsGateway,
   ) {}
 
   private map(post: PostEntity) {
@@ -113,15 +115,21 @@ export class PostsService {
 
     await this.applicationContext.posts.saveChanges();
 
-    return this.map(newPost);
+    const dto = this.map(newPost);
+    this.postsGateway.server.emit("createPost", dto)
+    return dto;
   }
 
   async createReply(replyId: number, { text }: NewPost): Promise<Post> {
-    return await this.createPost({ text, replyId });
+    const dto = await this.createPost({ text, replyId });
+    this.postsGateway.server.emit("createPost", dto)
+    return dto
   }
 
   async createRepost(repostId: number, { text }: NewPost): Promise<Post> {
-    return await this.createPost({ text, repostId });
+    const dto = await this.createPost({ text, repostId });
+    this.postsGateway.server.emit("createPost", dto)
+    return dto;
   }
 
   async createReaction(
@@ -147,11 +155,13 @@ export class PostsService {
 
     await this.applicationContext.reactions.saveChanges();
 
-    return new Reaction({
+    const dto = new Reaction({
       authorId: existing.authorId,
       postId: existing.postId,
       reaction: existing.reaction,
     });
+    this.postsGateway.server.emit("createPost", dto)
+    return dto;
   }
 
   async delete(postId: number): Promise<void> {
@@ -165,5 +175,7 @@ export class PostsService {
       id: postId,
     } as PostEntity);
     await this.applicationContext.posts.saveChanges();
+
+    this.postsGateway.server.emit("createPost", postId)
   }
 }
