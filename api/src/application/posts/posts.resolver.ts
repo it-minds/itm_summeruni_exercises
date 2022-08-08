@@ -6,21 +6,30 @@ import {
   Query,
   ResolveField,
   Mutation,
+  ComplexityEstimatorArgs,
 } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
 import { PostsPage } from "./models/post.page.model";
 import { Post } from "./models/post.model";
-import { ReactionsPage } from "./models/reaction.page.model";
+import { ReactionsPage } from "../reactions/models/reaction.page.model";
 import { NewPost } from "./models/post.input";
-import { ReactionInput } from "./models/reaction.input";
+import { ReactionInput } from "../reactions/models/reaction.input";
 import { Author } from "../authors/models/author.model";
-import { Reaction } from "./models/reaction.model";
+import { Reaction } from "../reactions/models/reaction.model";
+import { ReactionsService } from "../reactions/reactions.service";
 
 @Resolver((of) => Post)
 export class PostsResolver {
-  constructor(private postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly reactionsService: ReactionsService
+  ) {}
 
-  @Query((returns) => PostsPage, { name: "posts" })
+  @Query((returns) => PostsPage, {
+    name: "posts",
+    complexity: (options: ComplexityEstimatorArgs) =>
+      options.args.first * options.childComplexity,
+  })
   async getPosts(
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
     @Args("after", { type: () => String, nullable: true }) after: string
@@ -36,19 +45,25 @@ export class PostsResolver {
     return await this.postsService.findOneById(id);
   }
 
-  @ResolveField("reactions", (returns) => ReactionsPage)
+  @ResolveField("reactions", (returns) => ReactionsPage, {
+    complexity: (options: ComplexityEstimatorArgs) =>
+      options.args.first * options.childComplexity,
+  })
   async getReactions(
     @Parent() post: Post,
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
     @Args("after", { type: () => String, nullable: true }) after: string
   ) {
     const { id } = post;
-    const all = await this.postsService.findPostReactions({ postId: id });
+    const all = await this.reactionsService.findPostReactions({ postId: id });
 
     return ReactionsPage.pageGen(all, first, after);
   }
 
-  @ResolveField("replies", (returns) => PostsPage)
+  @ResolveField("replies", (returns) => PostsPage, {
+    complexity: (options: ComplexityEstimatorArgs) =>
+      options.args.first * options.childComplexity,
+  })
   async getReplies(
     @Parent() post: Post,
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
@@ -91,7 +106,7 @@ export class PostsResolver {
     @Args("postId") postId: number,
     @Args("reaction") { reaction }: ReactionInput
   ) {
-    return await this.postsService.createReaction(postId, reaction);
+    return await this.reactionsService.createReaction(postId, reaction);
   }
 
   @Mutation((returns) => String)

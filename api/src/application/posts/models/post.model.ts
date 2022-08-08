@@ -1,6 +1,5 @@
 import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { Reaction } from "./reaction.model";
 
 @ObjectType()
 export class Post {
@@ -23,8 +22,6 @@ export class Post {
   @Field((type) => Float)
   @ApiProperty()
   timestamp: number;
-
-  reactions: Reaction[];
 
   constructor(input: Partial<Post> = {}) {
     Object.assign(this, input);

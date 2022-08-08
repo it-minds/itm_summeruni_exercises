@@ -6,6 +6,7 @@ import {
   Query,
   ResolveField,
   Mutation,
+  ComplexityEstimatorArgs,
 } from "@nestjs/graphql";
 import { PostsPage } from "../posts/models/post.page.model";
 import { PostsService } from "../posts/posts.service";
@@ -32,7 +33,10 @@ export class AuthResolver {
     return await this.authService.login(username, password);
   }
 
-  @ResolveField("posts", (returns) => PostsPage, {})
+  @ResolveField("posts", (returns) => PostsPage, {
+    complexity: (options: ComplexityEstimatorArgs) =>
+      options.args.first * options.childComplexity,
+  })
   async getMyPosts(
     @Parent() me: Me,
     @Args("first", { type: () => Int }) first: number,

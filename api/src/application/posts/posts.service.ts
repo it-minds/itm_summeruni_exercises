@@ -1,12 +1,15 @@
-import { Inject, Injectable } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from "@nestjs/common";
 import { PostEntity } from "src/domain/post.entity";
-import { ReactionEntity, ReactionType } from "src/domain/reaction.entity";
 import { Author } from "../authors/models/author.model";
 import { IApplicationContext } from "../common/interfaces/applicationcontext.interface";
 import { ICurrentUserService } from "../common/interfaces/auth/currentuser.interface";
 import { NewPost } from "./models/post.input";
 import { Post } from "./models/post.model";
-import { Reaction } from "./models/reaction.model";
 import { PostsGateway } from "./posts.gateway";
 
 @Injectable()
@@ -16,7 +19,7 @@ export class PostsService {
     private applicationContext: IApplicationContext,
     @Inject("ICurrentUserService")
     private currentUserService: ICurrentUserService,
-    private readonly postsGateway: PostsGateway,
+    private readonly postsGateway: PostsGateway
   ) {}
 
   private map(post: PostEntity) {
@@ -50,7 +53,7 @@ export class PostsService {
     const post = await this.applicationContext.posts.getById(id);
 
     if (!post) {
-      throw new Error("404 - not found");
+      throw new NotFoundException("post not found");
     }
 
     return this.map(post);
@@ -70,12 +73,12 @@ export class PostsService {
     );
 
     if (!post) {
-      throw new Error("404 - not found");
+      throw new NotFoundException("post not found");
     }
 
     const author = await this.applicationContext.authors.getById(post.authorId);
     if (!author) {
-      throw new Error("404 - not found");
+      throw new NotFoundException("author not found");
     }
 
     const dto = new Author({
@@ -83,23 +86,6 @@ export class PostsService {
       username: author.name,
     });
     return dto;
-  }
-
-  async findPostReactions(
-    query: { postId?: number } = {}
-  ): Promise<Reaction[]> {
-    const reactions = await this.applicationContext.reactions.queryForMany({
-      postId: query.postId ?? -1,
-    });
-
-    return reactions.map(
-      (post) =>
-        new Reaction({
-          authorId: post.authorId,
-          postId: post.postId,
-          reaction: post.reaction,
-        })
-    );
   }
 
   async createPost(
@@ -116,51 +102,19 @@ export class PostsService {
     await this.applicationContext.posts.saveChanges();
 
     const dto = this.map(newPost);
-    this.postsGateway.server.emit("createPost", dto)
+    this.postsGateway.server.emit("createPost", dto);
     return dto;
   }
 
   async createReply(replyId: number, { text }: NewPost): Promise<Post> {
     const dto = await this.createPost({ text, replyId });
-    this.postsGateway.server.emit("createReply", dto)
-    return dto
+    this.postsGateway.server.emit("createReply", dto);
+    return dto;
   }
 
   async createRepost(repostId: number, { text }: NewPost): Promise<Post> {
     const dto = await this.createPost({ text, repostId });
-    this.postsGateway.server.emit("createRepost", dto)
-    return dto;
-  }
-
-  async createReaction(
-    postId: number,
-    reaction: ReactionType
-  ): Promise<Reaction> {
-    let existing = await this.applicationContext.reactions.queryForFirst({
-      authorId: this.currentUserService.getUserId(),
-      postId,
-    });
-
-    if (existing) {
-      existing.reaction = reaction;
-      this.applicationContext.reactions.update(existing);
-    } else {
-      existing = new ReactionEntity({
-        authorId: this.currentUserService.getUserId(),
-        postId,
-        reaction,
-      });
-      this.applicationContext.reactions.add(existing);
-    }
-
-    await this.applicationContext.reactions.saveChanges();
-
-    const dto = new Reaction({
-      authorId: existing.authorId,
-      postId: existing.postId,
-      reaction: existing.reaction,
-    });
-    this.postsGateway.server.emit("createReaction", dto)
+    this.postsGateway.server.emit("createRepost", dto);
     return dto;
   }
 
@@ -168,7 +122,11 @@ export class PostsService {
     const existing = await this.applicationContext.posts.getById(postId);
 
     if (!existing) {
-      throw new Error("404 - not found");
+      throw new NotFoundException("post not found");
+    }
+
+    if (existing.authorId !== this.currentUserService.getUserId()) {
+      throw new ForbiddenException("you are not the author of this post");
     }
 
     const toDelete = this.applicationContext.posts.delete({
@@ -176,6 +134,6 @@ export class PostsService {
     } as PostEntity);
     await this.applicationContext.posts.saveChanges();
 
-    this.postsGateway.server.emit("deletePost", postId)
+    this.postsGateway.server.emit("deletePost", postId);
   }
 }

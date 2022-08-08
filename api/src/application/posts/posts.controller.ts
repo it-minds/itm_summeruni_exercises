@@ -11,20 +11,20 @@ import {
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PostsService } from ".";
 import { PostsPage } from "./models/post.page.model";
-import { AuthorsService } from "../authors/authors.service";
 import { Author } from "../authors/models/author.model";
 import { Post } from "./models/post.model";
-import { ReactionsPage } from "./models/reaction.page.model";
+import { ReactionsPage } from "../reactions/models/reaction.page.model";
 import { NewPost } from "./models/post.input";
-import { ReactionInput } from "./models/reaction.input";
+import { ReactionInput } from "../reactions/models/reaction.input";
+import { ReactionsService } from "../reactions/reactions.service";
 
 @Controller("posts")
 @ApiTags("posts")
 @ApiBearerAuth("authorization")
 export class PostsController {
   constructor(
-    private readonly authorsService: AuthorsService,
-    private readonly postsService: PostsService
+    private readonly postsService: PostsService,
+    private readonly reactionsService: ReactionsService
   ) {}
 
   @Get("timeline")
@@ -64,7 +64,7 @@ export class PostsController {
     @Query("first") first: number,
     @Query("after") after?: string
   ) {
-    const all = await this.postsService.findPostReactions({ postId: id });
+    const all = await this.reactionsService.findPostReactions({ postId: id });
 
     return ReactionsPage.pageGen(all, first, after);
   }
@@ -100,7 +100,7 @@ export class PostsController {
     @Param("id") id: number,
     @Body() { reaction }: ReactionInput
   ) {
-    return await this.postsService.createReaction(id, reaction);
+    return await this.reactionsService.createReaction(id, reaction);
   }
 
   @Put(":id/reactions")
@@ -109,7 +109,7 @@ export class PostsController {
     @Param("id") id: number,
     @Body() { reaction }: ReactionInput
   ) {
-    return await this.postsService.createReaction(id, reaction);
+    return await this.reactionsService.createReaction(id, reaction);
   }
 
   @Delete(":id")

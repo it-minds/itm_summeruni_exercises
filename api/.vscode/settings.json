@@ -1,7 +1,8 @@
 {
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "modificationsIfAvailable",
-    "prettier.configPath": "../.prettierrc",
-    "editor.tabSize": 2,
-    "eslint.alwaysShowStatus": true
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modificationsIfAvailable",
+  "eslint.format.enable": true,
+  "prettier.enable": false,
+  "editor.tabSize": 2,
+  "material-icon-theme.activeIconPack": "nest"
 }

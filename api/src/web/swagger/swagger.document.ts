@@ -10,7 +10,7 @@ export const getSwaggerDocumentConfig = () => {
     .addTag("auth", "Authentication")
     .addTag("authors")
     .addTag("posts")
-    
+
     .addBearerAuth(
       { type: "http", scheme: "bearer", bearerFormat: "JWT", in: "header" },
       "authorization"

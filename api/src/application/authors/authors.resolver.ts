@@ -6,6 +6,7 @@ import {
   Query,
   ResolveField,
   Root,
+  ComplexityEstimatorArgs,
 } from "@nestjs/graphql";
 import { PostsService } from "../posts/posts.service";
 import { AuthorsService } from "./authors.service";
@@ -20,7 +21,11 @@ export class AuthorsResolver {
     private postsService: PostsService
   ) {}
 
-  @Query((returns) => AuthorsPage, { name: "authors" })
+  @Query((returns) => AuthorsPage, {
+    name: "authors",
+    complexity: (options: ComplexityEstimatorArgs) =>
+      options.args.first * options.childComplexity,
+  })
   async getAuthors(
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
     @Args("after", { type: () => String, nullable: true }) after: string
@@ -35,7 +40,10 @@ export class AuthorsResolver {
     return await this.authorsService.findOneById(id);
   }
 
-  @ResolveField("posts", (returns) => PostsPage)
+  @ResolveField("posts", (returns) => PostsPage, {
+    complexity: (options: ComplexityEstimatorArgs) =>
+      options.args.first * options.childComplexity,
+  })
   async getPosts(
     @Root() root: unknown,
     @Parent() author: Author,
