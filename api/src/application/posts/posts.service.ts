@@ -122,13 +122,13 @@ export class PostsService {
 
   async createReply(replyId: number, { text }: NewPost): Promise<Post> {
     const dto = await this.createPost({ text, replyId });
-    this.postsGateway.server.emit("createPost", dto)
+    this.postsGateway.server.emit("createReply", dto)
     return dto
   }
 
   async createRepost(repostId: number, { text }: NewPost): Promise<Post> {
     const dto = await this.createPost({ text, repostId });
-    this.postsGateway.server.emit("createPost", dto)
+    this.postsGateway.server.emit("createRepost", dto)
     return dto;
   }
 
@@ -160,7 +160,7 @@ export class PostsService {
       postId: existing.postId,
       reaction: existing.reaction,
     });
-    this.postsGateway.server.emit("createPost", dto)
+    this.postsGateway.server.emit("createReaction", dto)
     return dto;
   }
 
@@ -176,6 +176,6 @@ export class PostsService {
     } as PostEntity);
     await this.applicationContext.posts.saveChanges();
 
-    this.postsGateway.server.emit("createPost", postId)
+    this.postsGateway.server.emit("deletePost", postId)
   }
 }
