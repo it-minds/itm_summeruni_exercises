@@ -13,7 +13,7 @@ import {
   from,
 } from "solid-js";
 
-export const AdvanceEffect1 = () => {
+export const AdvancedEffect1 = () => {
   const [timer, setTimer] = createSignal(10);
 
   const decreaseTimer = () => setTimer((prev) => prev - 1);
@@ -41,19 +41,19 @@ export const AdvanceEffect1 = () => {
   );
 };
 
-export const AdvanceEffect2 = () => {
+export const AdvancedEffect2 = () => {
   return (
     <ErrorBoundary
       fallback={(err, reset) => (
         <button onClick={reset}>Try again! {JSON.stringify(err)}</button>
       )}
     >
-      <AdvanceEffect1 />
+      <AdvancedEffect1 />
     </ErrorBoundary>
   );
 };
 
-export const AdvanceEffect3 = () => {
+export const AdvancedEffect3 = () => {
   const [counter1, setCounter1] = createSignal(0);
   const [counter2, setCounter2] = createSignal(0);
 
@@ -75,7 +75,7 @@ export const AdvanceEffect3 = () => {
   );
 };
 
-export const AdvanceEffect4 = () => {
+export const AdvancedEffect4 = () => {
   const [counter1, setCounter1] = createSignal(0);
   const [counter2, setCounter2] = createSignal(0);
 
@@ -99,7 +99,7 @@ export const AdvanceEffect4 = () => {
   );
 };
 
-export const AdvanceEffect5 = () => {
+export const AdvancedEffect5 = () => {
   const [counter1, setCounter1] = createSignal(0);
   const [counter2, setCounter2] = createSignal(0);
 
@@ -123,7 +123,7 @@ export const AdvanceEffect5 = () => {
   );
 };
 
-export const AdvanceEffect6 = () => {
+export const AdvancedEffect6 = () => {
   const [count, setCount] = createSignal(0);
 
   const obsv$ = observable(count);
