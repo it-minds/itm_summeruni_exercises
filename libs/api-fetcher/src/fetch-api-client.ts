@@ -6,6 +6,8 @@ import {
   OpArgType,
   Request,
   CreateFetch,
+  _OpReturnType,
+  OpResponseTypes,
 } from "./fetch-api-types";
 
 const sendBody = (method: Method) =>
@@ -161,30 +163,88 @@ async function fetchJson(url: string, init: RequestInit): Promise<ApiResponse> {
   throw new Error(JSON.stringify(result));
 }
 
-export function fetcher() {
-  let baseUrl = "";
-  let baseInit: RequestInit;
+type Config = { baseUrl?: string; init?: RequestInit };
 
-  return {
-    configure: (config: { baseUrl?: string; init?: RequestInit }) => {
-      baseUrl = config.baseUrl || "";
-      baseInit = config.init || {};
-    },
-    path: <P extends keyof Paths>(path: P) => ({
+/**
+ * Build a typed client directly linked to the REST API.
+ *
+ *
+ * Example usage
+ * ```
+ * const fetcherClient = Fetcher.configure({
+ *   baseUrl: "http://localhost:8080",
+ *   init: {
+ *     headers: {
+ *       Authorization: "Bearer " + token,
+ *     },
+ *   }
+ * });
+ *
+ * const getAuthorClient = fetcherClient.path("/authors/{id}").method("get").build();
+ *
+ * const getAuthorResult = await getAuthorClient({
+ *   id: 1,
+ * });
+ *
+ * console.log(author.data);
+ * ```
+ *
+ * Created to allow reuse of the same instances by allowing `.configure` to be called multiple times changing headers, methods
+ *
+ * @returns
+ */
+export class Fetcher {
+  private baseUrl = "";
+  private baseInit: RequestInit = {};
+  private hasConfigured = false;
+
+  /**
+   * Set the configuration for the instance. Can be reused
+   * @param config
+   * @returns
+   */
+  configure(config: Config) {
+    this.baseUrl = config.baseUrl || "";
+    this.baseInit = config.init || {};
+    this.hasConfigured = true;
+    return this;
+  }
+
+  /**
+   * Creates a new instance of the Fetcher class and sets the initial configuration
+   * @param config
+   * @returns
+   */
+  static configure(config: Config) {
+    return new Fetcher().configure(config);
+  }
+
+  path<P extends keyof Paths>(path: P, config?: Config) {
+    if (config) {
+      this.configure(config);
+    }
+
+    if (!this.hasConfigured) throw Error("The client hasn't been configured");
+
+    return {
       method: <M extends keyof Paths[P]>(method: M) => ({
         build: ((queryParams?: Record<string, true | 1>) =>
           createFetch((payload, init = {}) => {
             return fetchUrl({
-              baseUrl: baseUrl || "",
+              baseUrl: this.baseUrl || "",
               path: path as string,
               method: method as Method,
               queryParams: Object.keys(queryParams || {}),
               payload,
-              init: { ...init, ...baseInit },
+              init: { ...init, ...this.baseInit },
               fetch: fetchJson,
             });
           })) as CreateFetch<M, Paths[P][M]>,
       }),
-    }),
-  };
+    };
+  }
 }
+
+export type Data<P extends keyof Paths, M extends keyof Paths[P]> = ApiResponse<
+  _OpReturnType<OpResponseTypes<Paths[P][M]>>
+>["data"];
