@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags, ApiResponse } from "@nestjs/swagger";
+import { Public } from "../auth/public.decorator";
 import { PostsService } from "../posts";
 import { PostsPage } from "../posts/models/post.page.model";
 import { AuthorsService } from "./authors.service";
@@ -46,6 +47,7 @@ export class AuthorsController {
     return PostsPage.pageGen(all, +first, after);
   }
 
+  @Public()
   @Post()
   @ApiResponse({ type: Author })
   async createAuthor(@Body() newAuthor: NewAuthor): Promise<Author> {

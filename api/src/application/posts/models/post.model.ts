@@ -13,11 +13,11 @@ export class Post {
 
   @Field((type) => Int, { nullable: true })
   @ApiProperty({ nullable: true })
-  relyId: number;
+  relyId: number = null;
 
   @Field((type) => Int, { nullable: true })
-  @ApiProperty({ nullable: true })
-  repostId: number;
+  @ApiProperty({ nullable: true, required: false })
+  repostId: number = null;
 
   @Field((type) => Float)
   @ApiProperty()

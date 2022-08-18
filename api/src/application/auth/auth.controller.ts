@@ -5,6 +5,7 @@ import { PostsService } from "../posts";
 import { PostsPage } from "../posts/models/post.page.model";
 import { AuthService } from "./auth.service";
 import { LoginInput } from "./models/login.input";
+import { LoginOutput } from "./models/login.output";
 import { Me } from "./models/me.model";
 import { Public } from "./public.decorator";
 
@@ -19,10 +20,13 @@ export class AuthController {
   @Post("login")
   @Public()
   @ApiResponse({
-    type: String,
+    type: LoginOutput,
   })
-  async login(@Body() { username, password }: LoginInput): Promise<string> {
-    return await this.authService.login(username, password);
+  async login(
+    @Body() { username, password }: LoginInput
+  ): Promise<LoginOutput> {
+    const token = await this.authService.login(username, password);
+    return new LoginOutput({ token });
   }
 
   @Get("me")
