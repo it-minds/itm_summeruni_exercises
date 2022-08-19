@@ -61,10 +61,7 @@ export class AuthorsResolver {
 
   @Mutation((returns) => Author)
   @Public()
-  async createAuthor(
-    @Args("data") { username, password }: LoginInput
-  ) {
+  async createAuthor(@Args("data") { username, password }: LoginInput) {
     return await this.authorsService.createAuthor({ username, password });
   }
 }
-

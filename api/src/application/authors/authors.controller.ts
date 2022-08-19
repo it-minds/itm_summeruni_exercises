@@ -1,4 +1,12 @@
-import { Body, Controller, DefaultValuePipe, Get, Param, Post, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  Post,
+  Query,
+} from "@nestjs/common";
 import { ApiBearerAuth, ApiTags, ApiResponse } from "@nestjs/swagger";
 import { Public } from "../auth/public.decorator";
 import { PostsService } from "../posts";

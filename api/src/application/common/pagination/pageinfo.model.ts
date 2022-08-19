@@ -6,6 +6,7 @@ export class PageInfo {
   @Field((type) => Boolean)
   @ApiProperty()
   hasPreviousPage: boolean;
+
   @Field((type) => Boolean)
   @ApiProperty()
   hasNextPage: boolean;

@@ -83,7 +83,7 @@ export class PostsResolver {
     return author;
   }
 
-  @ResolveField("reply", (returns) => Post, { nullable: true})
+  @ResolveField("reply", (returns) => Post, { nullable: true })
   async getReply(@Parent() post: Post) {
     const { relyId } = post;
     if (!relyId) return null;
@@ -93,7 +93,7 @@ export class PostsResolver {
     return reply;
   }
 
-  @ResolveField("repost", (returns) => Post, { nullable: true})
+  @ResolveField("repost", (returns) => Post, { nullable: true })
   async getRepost(@Parent() post: Post) {
     const { repostId } = post;
     if (!repostId) return null;
