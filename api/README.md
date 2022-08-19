@@ -32,3 +32,17 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+### Graphql Playground
+
+http://localhost:8080/graphql
+
+### Swagger
+
+http://localhost:8080/swagger
+
+### Authentication
+
+This API has authentication implemented. 
+Use an existing user or create one with either `POST /authors` or `createAuthor(data: {username: "MYNAME", password: "MYPASS"})`
+Then signin by getting a token with `POST /auth/login` or `login(loginData: {username: "MYNAME", password: "MYPASS"})`
+And set the http header `"authorization": "Bearer eyJhb..."`

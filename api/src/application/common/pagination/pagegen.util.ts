@@ -42,8 +42,8 @@ export const GenericPageGen =
     const pageInfo = new PageInfo({
       hasNextPage: section.length === first,
       hasPreviousPage: !!after,
-      endCursor:
-        section.length > 0 ? section[section.length - 1].cursor : undefined,
+      startCursor: section[0]?.cursor,
+      endCursor: section[section.length - 1]?.cursor,
     });
 
     return new PageInstance(

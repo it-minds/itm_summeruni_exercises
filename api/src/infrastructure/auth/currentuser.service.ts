@@ -9,7 +9,7 @@ import { JWT, Token } from "src/application/common/token.type";
 })
 export class CurrentUserService implements ICurrentUserService {
   constructor(
-    @Inject(REQUEST) private readonly request: Request,
+    @Inject(REQUEST) private readonly request,
     @Inject(CONTEXT) private readonly context
   ) {}
 

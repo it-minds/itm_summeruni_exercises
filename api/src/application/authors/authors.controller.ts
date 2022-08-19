@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, DefaultValuePipe, Get, Param, Post, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags, ApiResponse } from "@nestjs/swagger";
 import { Public } from "../auth/public.decorator";
 import { PostsService } from "../posts";
@@ -21,7 +21,8 @@ export class AuthorsController {
   @ApiResponse({ type: AuthorsPage })
   async getAuthors(
     @Query("first") first: number,
-    @Query("after") after?: string
+    @Query("after", new DefaultValuePipe(""))
+    after?: string
   ): Promise<AuthorsPage> {
     const all = await this.authorsService.findAll();
     return AuthorsPage.pageGen(all, +first, after);
@@ -38,7 +39,7 @@ export class AuthorsController {
   async getAuthorPosts(
     @Param("id") id: number,
     @Query("first") first: number,
-    @Query("after") after?: string
+    @Query("after", new DefaultValuePipe("")) after?: string
   ): Promise<PostsPage> {
     const all = await this.postsService.findAuthorsPosts({
       authorId: +id,

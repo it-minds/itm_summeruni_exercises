@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Post, Query } from "@nestjs/common";
+import { Body, Controller, DefaultValuePipe, Get, Header, Post, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Author } from "../authors/models/author.model";
 import { PostsService } from "../posts";
@@ -46,7 +46,7 @@ export class AuthController {
   @ApiBearerAuth("authorization")
   async getMyPosts(
     @Query("first") first: number,
-    @Query("after") after = ""
+    @Query("after", new DefaultValuePipe("")) after = ""
   ): Promise<PostsPage> {
     const me = await this.authService.findMe();
     const all = await this.postsService.findAuthorsPosts({ authorId: me.id });

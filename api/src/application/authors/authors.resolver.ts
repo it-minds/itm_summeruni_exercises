@@ -7,12 +7,15 @@ import {
   ResolveField,
   Root,
   ComplexityEstimatorArgs,
+  Mutation,
 } from "@nestjs/graphql";
 import { PostsService } from "../posts/posts.service";
 import { AuthorsService } from "./authors.service";
 import { Author } from "./models/author.model";
 import { AuthorsPage } from "./models/author.page.model";
 import { PostsPage } from "../posts/models/post.page.model";
+import { LoginInput } from "../auth/models/login.input";
+import { Public } from "../auth/public.decorator";
 
 @Resolver((of) => Author)
 export class AuthorsResolver {
@@ -55,4 +58,13 @@ export class AuthorsResolver {
 
     return PostsPage.pageGen(all, first, after);
   }
+
+  @Mutation((returns) => Author)
+  @Public()
+  async createAuthor(
+    @Args("data") { username, password }: LoginInput
+  ) {
+    return await this.authorsService.createAuthor({ username, password });
+  }
 }
+

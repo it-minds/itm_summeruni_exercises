@@ -14,6 +14,10 @@ export class PageInfo {
   @ApiProperty({ nullable: true })
   endCursor?: string;
 
+  @Field((type) => String, { nullable: true })
+  @ApiProperty({ nullable: true })
+  startCursor?: string;
+
   constructor(input: Partial<PageInfo> = {}) {
     Object.assign(this, input);
   }

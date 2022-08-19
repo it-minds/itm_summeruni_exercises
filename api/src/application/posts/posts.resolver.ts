@@ -83,6 +83,26 @@ export class PostsResolver {
     return author;
   }
 
+  @ResolveField("reply", (returns) => Post, { nullable: true})
+  async getReply(@Parent() post: Post) {
+    const { relyId } = post;
+    if (!relyId) return null;
+
+    const reply = await this.postsService.findOneById(relyId);
+
+    return reply;
+  }
+
+  @ResolveField("repost", (returns) => Post, { nullable: true})
+  async getRepost(@Parent() post: Post) {
+    const { repostId } = post;
+    if (!repostId) return null;
+
+    const repost = await this.postsService.findOneById(repostId);
+
+    return repost;
+  }
+
   @Mutation((returns) => Post)
   async newPost(@Args("post") { text }: NewPost) {
     return await this.postsService.createPost({ text });
