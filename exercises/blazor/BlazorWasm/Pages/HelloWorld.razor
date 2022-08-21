@@ -13,30 +13,34 @@
     protected override async Task OnInitializedAsync()
     {
         Greetings = "Mindster";
+        try
+        {
+            await SetToken();
+            Greetings = await GetUsername();
+
+        }
+        catch (Exception e)
+        {
+            /*
+                ¯\_(ツ)_/¯
+           */
+        }
+
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public async Task SetToken()
     {
-        if (firstRender)
-        {
-            try
+        var tokenResponse = await authClient.LoginAsync(new LoginInput
             {
-                var tokenResponse = await authClient.LoginAsync(new LoginInput
-                    {
-                        Username = "anders",
-                        Password = "anders"
-                    });
-                httpClient.SetToken(tokenResponse.Token);
+                Username = "anders",
+                Password = "anders"
+            });
+        httpClient.SetToken(tokenResponse.Token);
+    }
 
-                var me = await authClient.GetMeAsync();
-                Greetings = me.Username;
-            }
-            catch (Exception e)
-            {
-                /*
-                    ¯\_(ツ)_/¯
-               */
-            }
-        }
+    public async Task<string> GetUsername()
+    {
+        var me = await authClient.GetMeAsync();
+        return me.Username;
     }
 }

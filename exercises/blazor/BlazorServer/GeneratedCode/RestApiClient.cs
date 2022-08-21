@@ -1717,7 +1717,8 @@ namespace BlazorServer.GeneratedCode
     public partial class Author
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
-        public double Id { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("username", Required = Newtonsoft.Json.Required.AllowNull)]
         public string Username { get; set; }
@@ -1767,6 +1768,9 @@ namespace BlazorServer.GeneratedCode
         [Newtonsoft.Json.JsonProperty("endCursor", Required = Newtonsoft.Json.Required.AllowNull)]
         public string EndCursor { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("startCursor", Required = Newtonsoft.Json.Required.AllowNull)]
+        public string StartCursor { get; set; }
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
         [Newtonsoft.Json.JsonExtensionData]
@@ -1807,7 +1811,8 @@ namespace BlazorServer.GeneratedCode
     public partial class Post
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
-        public double Id { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("text", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -1946,7 +1951,8 @@ namespace BlazorServer.GeneratedCode
     public partial class Me
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
-        public double Id { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("username", Required = Newtonsoft.Json.Required.AllowNull)]
         public string Username { get; set; }

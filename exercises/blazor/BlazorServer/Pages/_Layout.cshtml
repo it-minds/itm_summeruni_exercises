@@ -28,5 +28,11 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script>
+        window.printStuff = (methodParameter) => {
+            console.log(methodParameter);
+            return "javascript value";
+        };
+    </script>
 </body>
 </html>
