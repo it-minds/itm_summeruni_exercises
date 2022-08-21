@@ -1,0 +1,11 @@
+﻿@page "/Demo"
+
+<TextInput @bind-Text="@TextboxValue" />
+<div>
+    @TextboxValue
+</div>
+
+@code {
+    private string TextboxValue { get; set; }
+
+}
