@@ -11,16 +11,17 @@ import {
   onMount,
   untrack,
   from,
+  Component,
 } from "solid-js";
 
-export const AdvancedEffect1 = () => {
-  const [timer, setTimer] = createSignal(10);
+export const AdvancedEffect1: Component = () => {
+  const [countdown, setCountdown] = createSignal(10);
 
-  const decreaseTimer = () => setTimer((prev) => prev - 1);
-  const interval = setInterval(decreaseTimer, 1000);
+  const decreaseCountdown = () => setCountdown((prev) => prev - 1);
+  const interval = setInterval(decreaseCountdown, 1000);
 
   createEffect(() => {
-    if (timer() <= 0) {
+    if (countdown() <= 0) {
       throw Error("BOOM!");
     }
   });
@@ -28,15 +29,16 @@ export const AdvancedEffect1 = () => {
   onMount(() => console.log("Tick Tock - the bomb till go off in 10 seconds!"));
   onCleanup(() => clearInterval(interval));
   onError((err) => {
-    console.error("Looks like the bomb went off!", err);
-    clearInterval(interval);
+    console.error("Looks like the bomb went off!", err.message);
     throw err;
   });
 
   return (
     <div>
-      <p>Countdown {timer()}</p>
-      <button onClick={() => setTimer(0)}>reset</button>
+      <p>Countdown {countdown()}</p>
+      <button type="button" onClick={() => setCountdown(10)}>
+        reset
+      </button>
     </div>
   );
 };

@@ -53,7 +53,7 @@ export interface paths {
 export interface components {
   schemas: {
     Author: {
-      id: number;
+      id: string;
       username: string | null;
     };
     AuthorsEdge: {
@@ -64,6 +64,7 @@ export interface components {
       hasPreviousPage: boolean;
       hasNextPage: boolean;
       endCursor: string | null;
+      startCursor: string | null;
     };
     AuthorsPage: {
       totalCount: number;
@@ -71,10 +72,10 @@ export interface components {
       pageInfo: components["schemas"]["PageInfo"];
     };
     Post: {
-      id: number;
+      id: string;
       text: string;
       relyId: number | null;
-      repostId: number | null;
+      repostId?: number | null;
       timestamp: number;
     };
     PostsEdge: {
@@ -94,8 +95,11 @@ export interface components {
       username: string;
       password: string;
     };
+    LoginOutput: {
+      token: string;
+    };
     Me: {
-      id: number;
+      id: string;
       username: string | null;
       sessionId: string;
       sessionStartTime: number;
@@ -186,7 +190,7 @@ export interface operations {
     responses: {
       default: {
         content: {
-          "application/json": string;
+          "application/json": components["schemas"]["LoginOutput"];
         };
       };
     };
@@ -210,6 +214,7 @@ export interface operations {
     parameters: {
       query: {
         first: number;
+        after: string;
       };
     };
     responses: {

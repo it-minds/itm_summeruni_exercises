@@ -4,7 +4,7 @@ export class AuthorEntity {
   name: string;
   password: string;
 
-  imageUrl?: string;
+  imageUrl?: string = null;
 
   constructor(partial: Partial<AuthorEntity>) {
     Object.assign(this, partial);

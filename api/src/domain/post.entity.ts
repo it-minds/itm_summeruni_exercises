@@ -4,8 +4,8 @@ export class PostEntity {
   text: string;
   timestamp: number;
 
-  replyId?: number;
-  repostId?: number;
+  replyId?: number = null;
+  repostId?: number = null;
   authorId: number;
 
   constructor(partial: Partial<PostEntity>) {

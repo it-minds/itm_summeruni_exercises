@@ -111,7 +111,7 @@ export class BaseCacheService<
     this.setTrack(track);
     return track;
   }
-
+  
   add(entity: Entity) {
     entity.id = -1;
     const track = this.getTrack(entity);
@@ -119,7 +119,7 @@ export class BaseCacheService<
     this.setTrack(track);
     return track;
   }
-
+  
   async saveChanges() {
     const all = await this.getAll();
 

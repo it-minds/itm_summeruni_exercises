@@ -54,7 +54,7 @@ export class AuthController {
   @ApiBearerAuth("authorization")
   async getMyPosts(
     @Query("first") first: number,
-    @Query("after", new DefaultValuePipe("")) after = ""
+    @Query("after", new DefaultValuePipe("")) after?: string
   ): Promise<PostsPage> {
     const me = await this.authService.findMe();
     const all = await this.postsService.findAuthorsPosts({ authorId: +me.id });

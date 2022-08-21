@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "build:schema": "node dist/schema-gen && npx openapi-typescript swagger-spec.json --output ../client/src/fetch-api-schema.ts",
+    "build:schema": "node dist/schema-gen && npx openapi-typescript swagger-spec.json --output ../libs/api-fetcher/src/fetch-api-schema.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

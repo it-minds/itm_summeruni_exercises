@@ -14,7 +14,9 @@ Summer University 2022 Twutter API!
 ## Installation
 
 ```bash
+# install node dependencies
 $ npm install
+# setup the local environment variables based on the provided example.
 $ cp .env.local.example .env.local
 ```
 

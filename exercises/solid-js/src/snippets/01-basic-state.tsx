@@ -16,7 +16,8 @@ export const BasicState2 = () => {
   const increaseCount = () => setCount((prev) => prev + 1);
 
   return (
-    <div>
+    <div> 
+
       <button onClick={increaseCount}>Click</button>
       <p>Count value is {doubledCount()}</p>
     </div>

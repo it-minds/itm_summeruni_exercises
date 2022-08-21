@@ -114,13 +114,32 @@ export const AdvanceState5 = () => {
 
   const [result, { refetch, mutate }] = createResource<
     number | string,
-    [source1: Accessor<string>, source2: Accessor<number>]
+    [Accessor<string>, Accessor<number>]
   >([input, coef], async ([source1, source2], { refetching }) => {
     if (!refetching) return 0;
-    const result =
-      (await AsyncReversePolishNotationCalc(source1(), 3000)) * source2();
-    return result;
+    const result = await AsyncReversePolishNotationCalc(source1(), 3000);
+    return result * source2();
   });
+
+  const sources = createMemo<[string, number]>(() => [input(), coef()]);
+
+  const [result2] = createResource(
+    sources,
+    async ([source1, source2], { refetching }) => {
+      if (!refetching) return 0;
+      const result = await AsyncReversePolishNotationCalc(source1, 3000);
+      return result * source2;
+    }
+  );
+
+  const [result3] = createResource(
+    createMemo<[string, number]>(() => [input(), coef()]),
+    async ([input, coef], { refetching }) => {
+      if (!refetching) return 0;
+      const result = await AsyncReversePolishNotationCalc(input, 3000);
+      return result * coef;
+    }
+  );
 
   return (
     <div>
@@ -158,7 +177,7 @@ export const AdvanceState5 = () => {
 export const AdvanceState6 = () => {
   const [input, setInput] = createSignal("");
   const [todos, setTodos] = createStore([
-    { id: 1, title: "Thing I have to do", done: true },
+    { id: 1, title: "Listen to Martin talk gibberish", done: true },
     { id: 2, title: "Learn a New Framework", done: false },
   ]);
 
@@ -190,9 +209,7 @@ export const AdvanceState6 = () => {
                   }))
                 }
               />
-              <p
-                style={todo.done ? { "text-decoration": "line-through" } : {}}
-              >
+              <p style={todo.done ? { "text-decoration": "line-through" } : {}}>
                 {todo.title}
               </p>
             </div>
