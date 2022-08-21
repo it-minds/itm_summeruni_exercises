@@ -3,9 +3,9 @@ import { ApiProperty } from "@nestjs/swagger";
 
 @ObjectType()
 export class Post {
-  @Field((type) => Int)
+  @Field()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Field()
   @ApiProperty()

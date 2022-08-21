@@ -57,7 +57,7 @@ export class AuthController {
     @Query("after", new DefaultValuePipe("")) after = ""
   ): Promise<PostsPage> {
     const me = await this.authService.findMe();
-    const all = await this.postsService.findAuthorsPosts({ authorId: me.id });
+    const all = await this.postsService.findAuthorsPosts({ authorId: +me.id });
 
     return PostsPage.pageGen(all, first, after);
   }

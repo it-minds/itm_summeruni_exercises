@@ -55,7 +55,7 @@ export class PostsResolver {
     @Args("after", { type: () => String, nullable: true }) after: string
   ) {
     const { id } = post;
-    const all = await this.reactionsService.findPostReactions({ postId: id });
+    const all = await this.reactionsService.findPostReactions({ postId: +id });
 
     return ReactionsPage.pageGen(all, first, after);
   }
@@ -70,7 +70,7 @@ export class PostsResolver {
     @Args("after", { type: () => String, nullable: true }) after: string
   ) {
     const { id } = post;
-    const all = await this.postsService.findPostReplies({ postId: id });
+    const all = await this.postsService.findPostReplies({ postId: +id });
 
     return PostsPage.pageGen(all, first, after);
   }
@@ -78,7 +78,7 @@ export class PostsResolver {
   @ResolveField("author", (returns) => Author)
   async getAuhtor(@Parent() post: Post) {
     const { id } = post;
-    const author = await this.postsService.findPostAuthor({ postId: id });
+    const author = await this.postsService.findPostAuthor({ postId: +id });
 
     return author;
   }

@@ -54,7 +54,7 @@ export class AuthorsResolver {
     @Args("after", { type: () => String, nullable: true }) after: string
   ) {
     const { id } = author;
-    const all = await this.postsService.findAuthorsPosts({ authorId: id });
+    const all = await this.postsService.findAuthorsPosts({ authorId: +id });
 
     return PostsPage.pageGen(all, first, after);
   }

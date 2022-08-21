@@ -2,12 +2,11 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { Post } from "src/application/posts/models/post.model";
 
-// technically a DTO! Do not persist!
 @ObjectType()
 export class Author {
-  @Field((type) => Int)
+  @Field()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Field({ nullable: true })
   @ApiProperty({ nullable: true })
