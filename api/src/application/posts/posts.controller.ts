@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   Body,
+  DefaultValuePipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PostsService } from ".";
@@ -31,7 +32,7 @@ export class PostsController {
   @ApiResponse({ type: PostsPage })
   async getTimeline(
     @Query("first") first: number,
-    @Query("after") after?: string
+    @Query("after", new DefaultValuePipe("")) after?: string
   ): Promise<PostsPage> {
     const all = await this.postsService.findAll();
     const sorted = all.sort((a, b) => b.timestamp - a.timestamp);
@@ -50,7 +51,7 @@ export class PostsController {
   async getPostReplies(
     @Param("id") id: number,
     @Query("first") first: number,
-    @Query("after") after?: string
+    @Query("after", new DefaultValuePipe("")) after?: string
   ): Promise<PostsPage> {
     const all = await this.postsService.findPostReplies({ postId: +id });
 
@@ -62,7 +63,7 @@ export class PostsController {
   async getPostReactions(
     @Param("id") id: number,
     @Query("first") first: number,
-    @Query("after") after?: string
+    @Query("after", new DefaultValuePipe("")) after?: string
   ) {
     const all = await this.reactionsService.findPostReactions({ postId: id });
 

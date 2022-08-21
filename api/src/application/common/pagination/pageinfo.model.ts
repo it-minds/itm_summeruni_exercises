@@ -6,6 +6,7 @@ export class PageInfo {
   @Field((type) => Boolean)
   @ApiProperty()
   hasPreviousPage: boolean;
+
   @Field((type) => Boolean)
   @ApiProperty()
   hasNextPage: boolean;
@@ -13,6 +14,10 @@ export class PageInfo {
   @Field((type) => String, { nullable: true })
   @ApiProperty({ nullable: true })
   endCursor?: string;
+
+  @Field((type) => String, { nullable: true })
+  @ApiProperty({ nullable: true })
+  startCursor?: string;
 
   constructor(input: Partial<PageInfo> = {}) {
     Object.assign(this, input);

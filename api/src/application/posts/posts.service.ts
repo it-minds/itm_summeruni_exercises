@@ -24,7 +24,7 @@ export class PostsService {
 
   private map(post: PostEntity) {
     return new Post({
-      id: post.id,
+      id: post.id.toString(),
       text: post.text,
       timestamp: post.timestamp,
       relyId: post.replyId,
@@ -82,7 +82,7 @@ export class PostsService {
     }
 
     const dto = new Author({
-      id: author.id,
+      id: author.id.toString(),
       username: author.name,
     });
     return dto;

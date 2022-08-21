@@ -22,7 +22,7 @@ export class AuthorsService {
     }
 
     const dto = new Author({
-      id: author.id,
+      id: author.id.toString(),
       username: author.name,
     });
 
@@ -34,7 +34,7 @@ export class AuthorsService {
 
     const dtos = authors.map((author) => {
       return new Author({
-        id: author.id,
+        id: author.id.toString(),
         username: author.name,
       });
     });
@@ -65,7 +65,7 @@ export class AuthorsService {
     });
 
     const dto = new Author({
-      id: author.id,
+      id: author.id.toString(),
       username: author.name,
     });
 
