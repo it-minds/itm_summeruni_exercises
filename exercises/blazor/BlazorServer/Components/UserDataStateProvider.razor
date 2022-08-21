@@ -1,0 +1,17 @@
+﻿
+<CascadingValue Value="@this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private string? Username = "CurrentHierarchy";
+     
+    public void SetUserName(string username)
+    {
+        Username = username;
+        StateHasChanged();
+    }
+}
