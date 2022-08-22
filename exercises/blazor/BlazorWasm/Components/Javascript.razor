@@ -1,0 +1,18 @@
+﻿@inject IJSRuntime js
+
+<div>
+    @stuff
+</div>
+
+@code {
+    string stuff { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            stuff = await js.InvokeAsync<string>("printStuff", "hello world");
+            StateHasChanged();
+        }
+    }
+}

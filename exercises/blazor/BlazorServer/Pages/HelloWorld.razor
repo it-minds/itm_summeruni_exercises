@@ -1,0 +1,46 @@
+﻿@page "/"
+@inject SummerUniHttpClient httpClient
+@inject IAuthClient authClient
+@inject IPostsClient postsClient
+
+<h1>
+    Hello @Greetings
+</h1>
+
+@code {
+    private string Greetings { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Greetings = "Mindster";
+        try
+        {
+            await SetToken();
+            Greetings = await GetUsername();
+
+        }
+        catch (Exception e)
+        {
+            /*
+                ¯\_(ツ)_/¯
+           */
+        }
+
+    }
+
+    public async Task SetToken()
+    {
+        var tokenResponse = await authClient.LoginAsync(new LoginInput
+            {
+                Username = "anders",
+                Password = "anders"
+            });
+        httpClient.SetToken(tokenResponse.Token);
+    }
+
+    public async Task<string> GetUsername()
+    {
+        var me = await authClient.GetMeAsync();
+        return me.Username;
+    }
+}

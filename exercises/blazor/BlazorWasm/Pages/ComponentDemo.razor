@@ -1,0 +1,13 @@
+﻿@using BlazorWasm.Components
+@page "/Demo"
+
+<TextInput @bind-Text="@TextboxValue" />
+<div class="text">
+    @TextboxValue
+</div>
+
+
+@code {
+    private string TextboxValue { get; set; }
+
+}
