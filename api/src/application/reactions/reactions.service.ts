@@ -17,8 +17,8 @@ export class ReactionsService {
 
   private map(post: ReactionEntity) {
     return new Reaction({
-      authorId: post.authorId,
-      postId: post.postId,
+      authorId: post.authorId.toString(),
+      postId: post.postId.toString(),
       reaction: post.reaction,
     });
   }
@@ -57,8 +57,8 @@ export class ReactionsService {
     await this.applicationContext.reactions.saveChanges();
 
     const dto = new Reaction({
-      authorId: existing.authorId,
-      postId: existing.postId,
+      authorId: existing.authorId.toString(),
+      postId: existing.postId.toString(),
       reaction: existing.reaction,
     });
     this.postsGateway.server.emit("createReaction", dto);

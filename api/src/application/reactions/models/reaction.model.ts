@@ -6,11 +6,11 @@ import { ReactionType } from "src/domain/reaction.entity";
 export class Reaction {
   @Field()
   @ApiProperty()
-  authorId: number;
+  authorId: string;
 
   @Field()
   @ApiProperty()
-  postId: number;
+  postId: string;
 
   @Field((type) => ReactionType)
   @ApiProperty({ enum: Object.values(ReactionType) })

@@ -17,7 +17,7 @@ export class ReactionsResolver {
   @ResolveField("author", (returns) => Author)
   async getAuthor(@Parent() reaction: Reaction) {
     const { authorId } = reaction;
-    const author = await this.authorService.findOneById(authorId);
+    const author = await this.authorService.findOneById(+authorId);
 
     return author;
   }
@@ -25,7 +25,7 @@ export class ReactionsResolver {
   @ResolveField("post", (returns) => Post)
   async getPost(@Parent() reaction: Reaction) {
     const { postId } = reaction;
-    const author = await this.postService.findOneById(postId);
+    const author = await this.postService.findOneById(+postId);
 
     return author;
   }
