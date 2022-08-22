@@ -29,6 +29,7 @@ export class PostsService {
       timestamp: post.timestamp,
       relyId: post.replyId,
       repostId: post.repostId,
+      authorId: post.authorId
     });
   }
 
