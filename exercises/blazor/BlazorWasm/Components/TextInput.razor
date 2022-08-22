@@ -1,0 +1,20 @@
+﻿<input type="text"
+       @bind="BoundText"
+       @bind:event="oninput">
+
+@code {
+    [Parameter]
+    public string LabelText { get; set; }
+
+    [Parameter]
+    public string Text {get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    private string BoundText
+    {
+        get => Text;
+        set => TextChanged.InvokeAsync(value);
+    }
+}
