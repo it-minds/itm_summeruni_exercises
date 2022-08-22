@@ -23,6 +23,10 @@ export default function Index() {
           <Link to="/sub/data-error">data error</Link>
         </li>
 
+        <li>
+          <Link to="/sub/123">A single post</Link>
+        </li>
+
       </ul>
     </div>
   );
