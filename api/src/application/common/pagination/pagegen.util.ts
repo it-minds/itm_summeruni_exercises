@@ -1,5 +1,6 @@
 import { Edge, Page } from "src/application/common/pagination/page.interface";
 import { PageInfo } from "src/application/common/pagination/pageinfo.model";
+import { IPaginationQuery } from "./pagination.interface";
 
 interface InstanceConstructor<T> {
   new (t: Partial<T>): T;
@@ -18,7 +19,7 @@ export const GenericPageGen =
     EdgeInstance: InstanceConstructor<V>,
     cursorCallback: (t: T) => string
   ) =>
-  (items: T[], first: number, after?: string): U => {
+  (items: T[], paginationQuery: IPaginationQuery): U => {
     const edges = items.map((item) => {
       return new EdgeInstance(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -30,18 +31,46 @@ export const GenericPageGen =
       );
     });
 
-    let section: V[];
+    console.log(paginationQuery);
 
-    if (!after) {
+    const { first = 20, after, before } = paginationQuery;
+
+    if (after && before) {
+      throw Error("Both after and before can't be used at the same time.");
+    }
+
+    let section: V[], hasNextPage: boolean, hasPreviousPage: boolean;
+
+    if (!after && !before) {
+      console.log("Paging default", 0, first)
       section = edges.slice(0, first);
-    } else {
-      const skipTo = edges.findIndex((x) => x.cursor === after);
-      section = edges.slice(skipTo + 1, skipTo + 1 + first);
+      hasPreviousPage = false;
+      hasNextPage = edges.length > first;
+    } else if (before) {
+      const lastIndex = edges.findIndex((x) => x.cursor === before);
+      const firstIndex = (lastIndex - first) > 0 ? (lastIndex - first) : 0;
+      console.log("Paging before", firstIndex, lastIndex)
+
+      if (lastIndex === -1) throw Error("Cursor not found");
+      
+      section = edges.slice(firstIndex, lastIndex);
+      hasPreviousPage = firstIndex > 0;
+      hasNextPage = edges.length > lastIndex;
+    } else if (after) {
+      const firstIndex = edges.findIndex((x) => x.cursor === after) + 1;
+      const lastIndex = (firstIndex + first) < edges.length ? (firstIndex + first) : edges.length;
+      console.log("Paging after", firstIndex, lastIndex)
+      
+      if (firstIndex === -1) throw Error("Cursor not found");
+
+      section = edges.slice(firstIndex, lastIndex);
+      hasPreviousPage = firstIndex > 0;
+      hasNextPage = edges.length > lastIndex;
     }
 
     const pageInfo = new PageInfo({
-      hasNextPage: section.length === first,
-      hasPreviousPage: !!after,
+      hasPreviousPage,
+      hasNextPage,
       startCursor: section[0]?.cursor,
       endCursor: section[section.length - 1]?.cursor,
     });

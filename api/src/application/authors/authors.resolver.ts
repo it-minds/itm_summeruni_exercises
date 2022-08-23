@@ -31,11 +31,12 @@ export class AuthorsResolver {
   })
   async getAuthors(
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
-    @Args("after", { type: () => String, nullable: true }) after: string
+    @Args("after", { type: () => String, nullable: true }) after: string,
+    @Args("before", { type: () => String, nullable: true }) before: string
   ) {
     const all = await this.authorsService.findAll();
 
-    return AuthorsPage.pageGen(all, first, after);
+    return AuthorsPage.pageGen(all, { first, after, before });
   }
 
   @Query((returns) => Author, { name: "author" })
@@ -51,12 +52,13 @@ export class AuthorsResolver {
     @Root() root: unknown,
     @Parent() author: Author,
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
-    @Args("after", { type: () => String, nullable: true }) after: string
+    @Args("after", { type: () => String, nullable: true }) after: string,
+    @Args("before", { type: () => String, nullable: true }) before: string
   ) {
     const { id } = author;
     const all = await this.postsService.findAuthorsPosts({ authorId: +id });
 
-    return PostsPage.pageGen(all, first, after);
+    return PostsPage.pageGen(all, { first, after, before });
   }
 
   @Mutation((returns) => Author)

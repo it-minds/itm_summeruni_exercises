@@ -7,7 +7,7 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags, ApiResponse, ApiQuery } from "@nestjs/swagger";
 import { Public } from "../auth/public.decorator";
 import { PostsService } from "../posts";
 import { PostsPage } from "../posts/models/post.page.model";
@@ -26,14 +26,31 @@ export class AuthorsController {
   ) {}
 
   @Get()
+  @ApiQuery({
+    name: "after",
+    type: String,
+    description: "The cursor of the edge to get the first X items after. Cant be used with 'before'",
+    required: false
+  })
+  @ApiQuery({
+    name: "before",
+    type: String,
+    description: "The cursor of the edge to get the first X items before. Cant be used with 'after'",
+    required: false
+  })
   @ApiResponse({ type: AuthorsPage })
   async getAuthors(
     @Query("first") first: number,
     @Query("after", new DefaultValuePipe(""))
-    after?: string
+    after?: string,
+    @Query("before", new DefaultValuePipe("")) before?: string
   ): Promise<AuthorsPage> {
     const all = await this.authorsService.findAll();
-    return AuthorsPage.pageGen(all, +first, after);
+    return AuthorsPage.pageGen(all, {
+      first,
+      after,
+      before
+    });
   }
 
   @Get(":id")
@@ -43,17 +60,34 @@ export class AuthorsController {
   }
 
   @Get(":id/posts")
+  @ApiQuery({
+    name: "after",
+    type: String,
+    description: "The cursor of the edge to get the first X items after. Cant be used with 'before'",
+    required: false
+  })
+  @ApiQuery({
+    name: "before",
+    type: String,
+    description: "The cursor of the edge to get the first X items before. Cant be used with 'after'",
+    required: false
+  })
   @ApiResponse({ type: PostsPage })
   async getAuthorPosts(
     @Param("id") id: number,
     @Query("first") first: number,
-    @Query("after", new DefaultValuePipe("")) after?: string
+    @Query("after", new DefaultValuePipe("")) after?: string,
+    @Query("before", new DefaultValuePipe("")) before?: string
   ): Promise<PostsPage> {
     const all = await this.postsService.findAuthorsPosts({
       authorId: +id,
     });
 
-    return PostsPage.pageGen(all, +first, after);
+    return PostsPage.pageGen(all, {
+      first,
+      after,
+      before
+    });
   }
 
   @Public()

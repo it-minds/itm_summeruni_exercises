@@ -40,11 +40,12 @@ export class AuthResolver {
   async getMyPosts(
     @Parent() me: Me,
     @Args("first", { type: () => Int }) first: number,
-    @Args("after", { type: () => String, nullable: true }) after: string
+    @Args("after", { type: () => String, nullable: true }) after: string,
+    @Args("before", { type: () => String, nullable: true }) before: string
   ) {
     const { id } = me;
     const all = await this.postsService.findAuthorsPosts({ authorId: +id });
 
-    return PostsPage.pageGen(all, first, after);
+    return PostsPage.pageGen(all, { first, after, before });
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@it-minds/itm_summeruni_utils",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Small utilities for the clients",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

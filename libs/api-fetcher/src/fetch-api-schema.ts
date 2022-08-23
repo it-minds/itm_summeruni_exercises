@@ -74,7 +74,8 @@ export interface components {
     Post: {
       id: string;
       text: string;
-      relyId: number | null;
+      authorId: number;
+      relyId?: number | null;
       repostId?: number | null;
       timestamp: number;
     };
@@ -127,7 +128,10 @@ export interface operations {
     parameters: {
       query: {
         first: number;
-        after: string;
+        /** The cursor of the edge to get the first X items after. Cant be used with 'before' */
+        after?: string;
+        /** The cursor of the edge to get the first X items before. Cant be used with 'after' */
+        before?: string;
       };
     };
     responses: {
@@ -174,7 +178,10 @@ export interface operations {
       };
       query: {
         first: number;
-        after: string;
+        /** The cursor of the edge to get the first X items after. Cant be used with 'before' */
+        after?: string;
+        /** The cursor of the edge to get the first X items before. Cant be used with 'after' */
+        before?: string;
       };
     };
     responses: {
@@ -214,7 +221,10 @@ export interface operations {
     parameters: {
       query: {
         first: number;
-        after: string;
+        /** The cursor of the edge to get the first X items after. Cant be used with 'before' */
+        after?: string;
+        /** The cursor of the edge to get the first X items before. Cant be used with 'after' */
+        before?: string;
       };
     };
     responses: {
@@ -229,7 +239,10 @@ export interface operations {
     parameters: {
       query: {
         first: number;
-        after: string;
+        /** The cursor of the edge to get the first X items after. Cant be used with 'before' */
+        after?: string;
+        /** The cursor of the edge to get the first X items before. Cant be used with 'after' */
+        before?: string;
       };
     };
     responses: {
@@ -271,7 +284,10 @@ export interface operations {
       };
       query: {
         first: number;
-        after: string;
+        /** The cursor of the edge to get the first X items after. Cant be used with 'before' */
+        after?: string;
+        /** The cursor of the edge to get the first X items before. Cant be used with 'after' */
+        before?: string;
       };
     };
     responses: {
@@ -308,7 +324,10 @@ export interface operations {
       };
       query: {
         first: number;
-        after: string;
+        /** The cursor of the edge to get the first X items after. Cant be used with 'before' */
+        after?: string;
+        /** The cursor of the edge to get the first X items before. Cant be used with 'after' */
+        before?: string;
       };
     };
     responses: {

@@ -7,7 +7,7 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Author } from "../authors/models/author.model";
 import { PostsService } from "../posts";
 import { PostsPage } from "../posts/models/post.page.model";
@@ -48,17 +48,34 @@ export class AuthController {
   }
 
   @Get("me/posts")
+  @ApiQuery({
+    name: "after",
+    type: String,
+    description: "The cursor of the edge to get the first X items after. Cant be used with 'before'",
+    required: false
+  })
+  @ApiQuery({
+    name: "before",
+    type: String,
+    description: "The cursor of the edge to get the first X items before. Cant be used with 'after'",
+    required: false
+  })
   @ApiResponse({
     type: PostsPage,
   })
   @ApiBearerAuth("authorization")
   async getMyPosts(
     @Query("first") first: number,
-    @Query("after", new DefaultValuePipe("")) after?: string
+    @Query("after", new DefaultValuePipe("")) after?: string,
+    @Query("before", new DefaultValuePipe("")) before?: string
   ): Promise<PostsPage> {
     const me = await this.authService.findMe();
     const all = await this.postsService.findAuthorsPosts({ authorId: +me.id });
 
-    return PostsPage.pageGen(all, first, after);
+    return PostsPage.pageGen(all, {
+      first,
+      after,
+      before
+    });
   }
 }

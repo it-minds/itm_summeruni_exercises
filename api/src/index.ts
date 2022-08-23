@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: process.env.CORS_ORIGIN,
+    origin: ["https://bf1e730b0b6d.eu.ngrok.io", process.env.CORS_ORIGIN],
   });
 
   const seeder = app.get(SeedService);

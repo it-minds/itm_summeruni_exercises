@@ -32,12 +32,13 @@ export class PostsResolver {
   })
   async getPosts(
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
-    @Args("after", { type: () => String, nullable: true }) after: string
+    @Args("after", { type: () => String, nullable: true }) after: string,
+    @Args("before", { type: () => String, nullable: true }) before: string
   ) {
     const all = await this.postsService.findAll();
     const sorted = all.sort((a, b) => b.timestamp - a.timestamp);
 
-    return PostsPage.pageGen(sorted, first, after);
+    return PostsPage.pageGen(sorted, { first, after, before });
   }
 
   @Query((returns) => Post, { name: "post" })
@@ -52,12 +53,13 @@ export class PostsResolver {
   async getReactions(
     @Parent() post: Post,
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
-    @Args("after", { type: () => String, nullable: true }) after: string
+    @Args("after", { type: () => String, nullable: true }) after: string,
+    @Args("before", { type: () => String, nullable: true }) before: string
   ) {
     const { id } = post;
     const all = await this.reactionsService.findPostReactions({ postId: +id });
 
-    return ReactionsPage.pageGen(all, first, after);
+    return ReactionsPage.pageGen(all, { first, after, before });
   }
 
   @ResolveField("replies", (returns) => PostsPage, {
@@ -67,12 +69,13 @@ export class PostsResolver {
   async getReplies(
     @Parent() post: Post,
     @Args("first", { type: () => Int, defaultValue: 20 }) first: number,
-    @Args("after", { type: () => String, nullable: true }) after: string
+    @Args("after", { type: () => String, nullable: true }) after: string,
+    @Args("before", { type: () => String, nullable: true }) before: string
   ) {
     const { id } = post;
     const all = await this.postsService.findPostReplies({ postId: +id });
 
-    return PostsPage.pageGen(all, first, after);
+    return PostsPage.pageGen(all, { first, after, before });
   }
 
   @ResolveField("author", (returns) => Author)
