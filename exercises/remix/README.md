@@ -4,6 +4,12 @@
 
 ## Development
 
+install dependencies
+
+```sh
+npm i
+```
+
 From your terminal:
 
 ```sh
