@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@it-minds/itm_summeruni_utils": "^1.2.0",
+    "@it-minds/itm_summeruni_utils": "^1.3.0",
     "next": "^12.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
